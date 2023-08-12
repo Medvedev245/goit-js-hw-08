@@ -1,44 +1,37 @@
 import throttle from 'lodash.throttle';
 
-const refs = {
+const STORAGE_KEY = 'feedback-form-state';
+
+const el = {
   form: document.querySelector('.feedback-form'),
-  textarea: document.querySelector('.feedback-form textarea'),
+  email: document.querySelector('input[name="email"]'),
+  message: document.querySelector('textarea[name="message"]'),
 };
 
-const FormData = {};
+const savedData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
 
-refs.form.addEventListener('submit', formSubmit);
-refs.form.addEventListener('input', throttle(textareaInput, 500));
-
-manipulateText();
-
-//  1) Получаем значения TextArea и мейл
-//     кидаем єто в переменную FormData и в локалсторедж
-//     Сохраняем его в хранилище
-//     тротл 500
-
-function textareaInput(evt) {
-  FormData[evt.target.name] = evt.target.value;
-  localStorage.setItem('feedback-form-state', JSON.stringify(FormData));
+if (savedData !== {}) {
+  el.email.value = savedData.email || '';
+  el.message.value = savedData.message || '';
 }
 
-//   2) Убираем ПОУМОЛЧАНИЮ
-//      убираем сообщение из хранилища
-//      очищаем форму
-function formSubmit(evt) {
+el.form.addEventListener('input', throttle(saveInput, 500));
+
+function saveInput(evt) {
+  const formData = savedData;
+  formData[evt.target.name] = evt.target.value;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
+}
+
+el.form.addEventListener('submit', result);
+
+function result(evt) {
   evt.preventDefault();
-  evt.target.reset();
-  localStorage.removeItem('feedback-form-state');
-}
-
-//   3) Получаем Значение из хранилища
-//      Если есть значение обновляем ДОМ
-function manipulateText() {
-  const saveText = localStorage.getItem('feedback-form-state');
-  if (saveText) {
-    refs.textarea.value = saveText;
+  if (el.email.value === '') {
+    alert('the email is empty');
+    return;
   }
+  console.log(savedData);
+  localStorage.removeItem(STORAGE_KEY);
+  el.form.reset();
 }
-
-// ЮзерКейс Форма инпут меседж и емеил отправка через ЛокалСторедж
-// С Тротлем
