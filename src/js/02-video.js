@@ -1,12 +1,12 @@
 import Player from '@vimeo/player';
 
-// const player = new Player('handstick', {
-//   id: 19231868,
-//   width: 640,
-// });
+// Select with the DOM API
+const iframe = document.querySelector('iframe');
 
-// player.on('play', function () {
-//   console.log('played the video!');
-// });
+const player = new Player(iframe);
+console.log(iframe);
 
-console.log('egr');
+player.on('pause', function () {
+  console.log(player.getCurrentTime());
+  localStorage.setItem('1', 'player');
+});

@@ -19,7 +19,6 @@ manipulateText();
 
 function textareaInput(evt) {
   FormData[evt.target.name] = evt.target.value;
-  console.log(FormData);
   localStorage.setItem('feedback-form-state', JSON.stringify(FormData));
 }
 
@@ -28,7 +27,6 @@ function textareaInput(evt) {
 //      очищаем форму
 function formSubmit(evt) {
   evt.preventDefault();
-  //   console.log('jnghfdrf');
   evt.target.reset();
   localStorage.removeItem('feedback-form-state');
 }
@@ -41,8 +39,6 @@ function manipulateText() {
     refs.textarea.value = saveText;
   }
 }
-
-console.log('werf');
 
 // ЮзерКейс Форма инпут меседж и емеил отправка через ЛокалСторедж
 // С Тротлем
