@@ -1,5 +1,29 @@
-// Add imports above this line
 import { galleryItems } from './gallery-items';
-// Change code below this line
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-console.log(galleryItems);
+// console.log(galleryItems);
+
+const container = document.querySelector('.gallery');
+
+const img = galleryItems
+  .map(
+    ({ preview, original, description }) =>
+      `<li class ="gallery__item" style="list-style: none">
+            <a class="gallery__link" href="${original}">
+                 <img class="gallery__image" src="${preview}"
+                        alt="${description}"/>
+            </a>
+        </li>`
+  )
+  .join(''); //Обьединяет все эл массива в строку.
+
+container.insertAdjacentHTML('beforeend', img);
+
+new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
+
+console.log('object');
